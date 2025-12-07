@@ -1,0 +1,263 @@
+@charset "utf-8";
+
+/* 기본 세팅 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 왼쪽은 고정, 오른쪽만 내부 스크롤 하고 싶으면
+   전체 body 스크롤을 막는 게 깔끔함 */
+body {
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+/* ========= 공통 레이아웃 ========= */
+
+#layout {
+  /*   border: 1px solid red; */
+  width: 100%;
+  max-width: 1920px;
+  height: 1080px; /* 한 화면에 고정 */
+  margin: 0 auto;
+  padding: 60px; /* 시안처럼 안쪽 여백 */
+  display: flex;
+  gap: 40px; /* 좌우 컬럼 간격 */
+}
+
+/* 왼쪽 / 오른쪽 비율 */
+#left_p {
+  /*   border: 1px solid blue; */
+  padding: 30px;
+  flex: 2;
+  height: 100%;
+  display: flex;
+}
+
+/* 소개 + 시소 전체 래퍼 */
+#introudce_p {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 위에 텍스트, 아래에 시소 */
+  /*   border: 1px solid pink; */
+}
+
+/* 오른쪽 컬럼 : 내부 스크롤 */
+#right_p {
+  /*   border: 1px solid blue; */
+  flex: 1;
+  min-width: 0; /* 이미지 때문에 왼쪽이 눌리는 현상 방지 */
+  height: 100%;
+  overflow-y: auto; /* 🔥 오른쪽만 세로 스크롤 */
+  padding: 30px;
+}
+
+/* 오른쪽 내용 래퍼 */
+#right_detail {
+  width: 100%;
+  /*   border: 1px solid green; */
+}
+
+/* ========= 왼쪽(소개 영역) ========= */
+
+#desinger h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 40px;
+  /*   border: 1px solid red; */
+}
+
+#desinger p {
+  font-weight: medium;
+  font-size: 28px;
+  line-height: 50px;
+  letter-spacing: -0.3px;
+  margin: 0;
+  /*   border: 1px solid red; */
+}
+
+/* 회사 키워드 (YG, 현대카드 등) */
+.company-key {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ====== 시소 영역 전체 ====== */
+#under {
+  margin-top: 120px; /* 소개문과의 간격 */
+  position: relative;
+  height: 280px; /* 시소 전체 높이 */
+  /*   border: 1px solid red; */
+  display: flex;
+}
+
+/* 'unbalance' 텍스트 위치 */
+#text {
+  display: none;
+  position: absolute;
+  /* 시소 왼쪽 끝 + 약간 안쪽으로 */
+  left: calc(50% - 310px); /* 50% = 중앙, 260px = 시소 절반 너비 */
+  bottom: 220px; /* 막대보다 살짝 아래 */
+  margin: 0;
+  letter-spacing: -0.5px;
+  font-size: 32px; /* 실제 시안 느낌에 가까운 크기 */
+}
+
+/* 시소 전체 래퍼 : 왼쪽 영역 기준 가운데 정렬 */
+#si {
+  position: absolute;
+  left: 50%; /* 가로 중앙 */
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 520px; /* 시소 가로 크기 (조금 크게) */
+  height: 240px;
+}
+
+/* 시소 막대 : 두께감 있는 긴 사각형 */
+/* 시소 막대 : 테두리만 있는 긴 사각형 */
+/* 시소 막대 */
+#re_l {
+  position: absolute;
+  left: -10px;
+  bottom: 132px; /* 🔥 원래 140px 같은 값이었다면 조금 내려줘 */
+  width: 540px;
+  height: 15px;
+  background: transparent;
+  border: 3px solid #000;
+  border-radius: 4px;
+  transform: rotate(-7deg);
+  transform-origin: 50% 50%;
+  z-index: 1;
+}
+
+/* 시소 받침 : 검정 테두리만 있는 삼각형 */
+#tri {
+  position: absolute;
+  left: 50%;
+  bottom: 30px; /* 막대 아래쪽 */
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-top: none;
+  border-bottom: 100px solid #000; /* 바깥 검정 삼각형 */
+  z-index: 0;
+}
+
+/* 안쪽을 흰색으로 한 번 더 덮어서 '테두리' 느낌만 남기기 */
+#tri::after {
+  content: "";
+  position: absolute;
+  left: -74px;
+  top: 6px;
+  width: 0;
+  height: 0;
+  border-left: 74px solid transparent;
+  border-right: 74px solid transparent;
+  border-bottom: 92px solid #fff; /* 배경색과 동일 (채우기 X 효과) */
+}
+
+/* 시소 위 카드 (조금 더 크게) */
+#re {
+  position: absolute;
+  left: 150px; /* 막대 왼쪽 쪽에 걸치게 */
+  bottom: 175px; /* 막대 위에 얹히도록 */
+  width: 260px;
+  height: 150px;
+  background: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  transform: rotate(-12deg);
+  transform-origin: 50% 50%;
+  z-index: 2;
+}
+
+#project-label {
+  font-size: 11px;
+}
+/* 시소에서 키워드 떨어지게 */
+/* ===== 키워드 떨어지는 영역 ===== */
+/* ===== 키워드 떨어지는 영역 ===== */
+#keyword-container {
+  position: absolute;
+  left: 0;
+  top: -32px; /* 막대 바로 위 */
+  width: 100%; /* 막대 전체 폭 */
+  height: 32px; /* 위로 너무 못 올라가게 */
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* 키워드 조각 */
+.keyword-chip {
+  position: absolute;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1.5px solid #000;
+  background: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ========= 오른쪽(프로젝트 상세) ========= */
+
+#yg_section {
+  padding-right: 16px; /* 스크롤바 여유 공간 */
+}
+
+#yg_section h2 {
+  font-size: 32px;
+  margin: 0 0 24px;
+}
+
+.section_detail {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 각 이미지 + 텍스트 묶임이 자연스럽게 보이도록 */
+.section_detail img {
+  max-width: 100%; /* 오른쪽 칸 안에서만 커지도록 */
+  height: auto;
+  display: block;
+}
+
+.section_detail h3 {
+  font-size: 28px;
+  margin: 8px 0;
+}
+
+.section_detail p {
+  font-size: 22px;
+  line-height: 1.7;
+  margin: 0 0 8px;
+}
+
+/* 필요하면 스크롤바 스타일도 살짝 */
+#right_p::-webkit-scrollbar {
+  width: 6px;
+}
+
+#right_p::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+#right_p::-webkit-scrollbar-track {
+  background: transparent;
+}
