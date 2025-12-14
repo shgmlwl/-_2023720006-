@@ -1,6 +1,8 @@
 @charset "utf-8";
 
-/* 기본 세팅 */
+/* =========================
+   기본 세팅
+========================= */
 * {
   box-sizing: border-box;
 }
@@ -9,128 +11,124 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
-/* 왼쪽은 고정, 오른쪽만 내부 스크롤 하고 싶으면
-   전체 body 스크롤을 막는 게 깔끔함 */
+/* 전체 기본 폰트 */
 body {
-  overflow: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: "Sandoll GyeokdongG2", system-ui, sans-serif;
+  font-weight: 400;
+  color: #111;
+  background: #ffffff;
+  overflow: hidden; /* 스크롤 없이 한 화면에 */
 }
 
-/* ========= 공통 레이아웃 ========= */
-
-#layout {
-  /*   border: 1px solid red; */
-  width: 100%;
-  max-width: 1920px;
-  height: 1080px; /* 한 화면에 고정 */
-  margin: 0 auto;
-  padding: 60px; /* 시안처럼 안쪽 여백 */
-  display: flex;
-  gap: 40px; /* 좌우 컬럼 간격 */
-}
-
-/* 왼쪽 / 오른쪽 비율 */
-#left_p {
-  /*   border: 1px solid blue; */
-  padding: 30px;
-  flex: 2;
-  height: 100%;
-  display: flex;
-}
-
-/* 소개 + 시소 전체 래퍼 */
-#introudce_p {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* 위에 텍스트, 아래에 시소 */
-  /*   border: 1px solid pink; */
-}
-
-/* 오른쪽 컬럼 : 내부 스크롤 */
-#right_p {
-  /*   border: 1px solid blue; */
-  flex: 1;
-  min-width: 0; /* 이미지 때문에 왼쪽이 눌리는 현상 방지 */
-  height: 100%;
-  overflow-y: auto; /* 🔥 오른쪽만 세로 스크롤 */
-  padding: 30px;
-}
-
-/* 오른쪽 내용 래퍼 */
-#right_detail {
-  width: 100%;
-  /*   border: 1px solid green; */
-}
-
-/* ========= 왼쪽(소개 영역) ========= */
-
-#desinger h1 {
-  font-size: 32px;
-  font-weight: bold;
-  margin: 0;
-  margin-bottom: 40px;
-  /*   border: 1px solid red; */
-}
-
-#desinger p {
-  font-weight: medium;
-  font-size: 28px;
-  line-height: 50px;
-  letter-spacing: -0.3px;
-  margin: 0;
-  /*   border: 1px solid red; */
-}
-
-/* 회사 키워드 (YG, 현대카드 등) */
-.company-key {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* ====== 시소 영역 전체 ====== */
-#under {
-  margin-top: 120px; /* 소개문과의 간격 */
+/* =========================
+   1920×1080 캔버스 스케일 래퍼
+========================= */
+#page-wrap {
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  height: 280px; /* 시소 전체 높이 */
-  /*   border: 1px solid red; */
-  display: flex;
+  overflow: hidden;
 }
 
-/* 'unbalance' 텍스트 위치 */
-#text {
-  display: none;
+/* 실제 디자인 캔버스 (비율 고정) */
+#layout {
   position: absolute;
-  /* 시소 왼쪽 끝 + 약간 안쪽으로 */
-  left: calc(50% - 310px); /* 50% = 중앙, 260px = 시소 절반 너비 */
-  bottom: 220px; /* 막대보다 살짝 아래 */
-  margin: 0;
-  letter-spacing: -0.5px;
-  font-size: 32px; /* 실제 시안 느낌에 가까운 크기 */
+  width: 1920px;
+  height: 1080px;
+  background: #ffffff;
+  display: flex;
+  gap: 40px;
+  padding: 60px;
+  align-items: center;
+  box-sizing: border-box;
+
+  /* JS에서 scale + left/top 을 덮어씀 */
+  transform-origin: top left;
+}
+/* 뒤로가기 버튼 */
+/* ✅ 뒤로가기 버튼 (layout 패딩 축: top/left 60px) */
+#back-btn {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  width: 44px;
+  height: 44px;
+  border: 2px solid #111;
+  border-radius: 999px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
 }
 
-/* 시소 전체 래퍼 : 왼쪽 영역 기준 가운데 정렬 */
+#back-btn .material-symbols-outlined {
+  font-size: 28px;
+  line-height: 1;
+}
+
+#back-btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+#back-btn:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   LEFT : 시소 영역
+========================= */
+#left_p {
+  flex: 4;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 시소 전체 박스 */
+#under {
+  position: relative;
+  width: 780px;
+  height: 460px;
+}
+
+/* balance / unbalance 텍스트 */
+#text {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+/* 시소 래퍼 */
 #si {
   position: absolute;
-  left: 50%; /* 가로 중앙 */
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 520px; /* 시소 가로 크기 (조금 크게) */
-  height: 240px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 780px;
+  height: 340px;
 }
 
-/* 시소 막대 : 두께감 있는 긴 사각형 */
-/* 시소 막대 : 테두리만 있는 긴 사각형 */
 /* 시소 막대 */
 #re_l {
   position: absolute;
   left: -10px;
-  bottom: 132px; /* 🔥 원래 140px 같은 값이었다면 조금 내려줘 */
-  width: 540px;
-  height: 15px;
+  bottom: 195px;
+  width: 800px;
+  height: 30px;
   background: transparent;
   border: 3px solid #000;
   border-radius: 4px;
@@ -139,125 +137,266 @@ body {
   z-index: 1;
 }
 
-/* 시소 받침 : 검정 테두리만 있는 삼각형 */
+/* 시소 삼각 받침 */
+/* ✅ 시소 삼각 받침: 막대(3px)와 동일한 선 두께로 */
+/* ✅ 시소 삼각 받침 (SVG 버전) */
 #tri {
   position: absolute;
   left: 50%;
-  bottom: 30px; /* 막대 아래쪽 */
+  bottom: 65px;
   transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 80px solid transparent;
-  border-right: 80px solid transparent;
-  border-top: none;
-  border-bottom: 100px solid #000; /* 바깥 검정 삼각형 */
+  width: 210px;
+  height: 130px;
   z-index: 0;
 }
 
-/* 안쪽을 흰색으로 한 번 더 덮어서 '테두리' 느낌만 남기기 */
-#tri::after {
-  content: "";
-  position: absolute;
-  left: -74px;
-  top: 6px;
-  width: 0;
-  height: 0;
-  border-left: 74px solid transparent;
-  border-right: 74px solid transparent;
-  border-bottom: 92px solid #fff; /* 배경색과 동일 (채우기 X 효과) */
+#tri polygon {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+
+  /* 🔑 핵심 */
+  stroke-linejoin: round; /* 모서리 겹침 완화 */
+  stroke-linecap: butt; /* 밑변 끝 두께 과장 방지 */
+
+  vector-effect: non-scaling-stroke;
 }
 
-/* 시소 위 카드 (조금 더 크게) */
+/* 카드 (로고 / 이름이 들어가는 영역) */
 #re {
   position: absolute;
-  left: 150px; /* 막대 왼쪽 쪽에 걸치게 */
-  bottom: 175px; /* 막대 위에 얹히도록 */
-  width: 260px;
-  height: 150px;
-  background: #000;
-  color: #fff;
+  left: 210px;
+  bottom: 250px;
+  width: 340px;
+  height: 190px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.5px;
   transform: rotate(-12deg);
   transform-origin: 50% 50%;
   z-index: 2;
 }
 
-#project-label {
-  font-size: 11px;
+/* 로고 이미지 */
+#project-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
-/* 시소에서 키워드 떨어지게 */
-/* ===== 키워드 떨어지는 영역 ===== */
-/* ===== 키워드 떨어지는 영역 ===== */
+
+/* 키워드 컨테이너 */
 #keyword-container {
   position: absolute;
+  top: -50px;
   left: 0;
-  top: -32px; /* 막대 바로 위 */
-  width: 100%; /* 막대 전체 폭 */
-  height: 32px; /* 위로 너무 못 올라가게 */
+  width: 100%;
+  height: 50px;
   pointer-events: none;
   overflow: visible;
 }
 
-/* 키워드 조각 */
+/* 키워드 칩 */
 .keyword-chip {
   position: absolute;
-  padding: 4px 10px;
+  padding: 8px 18px;
   border-radius: 999px;
-  border: 1.5px solid #000;
+  border: 2px solid #000;
   background: #fff;
-  font-size: 12px;
+  font-size: 16px;
   white-space: nowrap;
 }
 
-/* ========= 오른쪽(프로젝트 상세) ========= */
+/* =========================
+   RIGHT : 정보 영역
+========================= */
+#right_p {
+  flex: 6;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
 
+/* 오른쪽 전체 패널 */
+#right_detail {
+  width: 100%;
+  max-width: 780px;
+  height: 100%;
+  margin-left: auto; /* 오른쪽 끝 정렬 느낌 */
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  min-height: 0;
+}
+
+/* =========================
+   심석용 소개
+========================= */
+#desinger {
+  width: 100%;
+}
+
+#desinger h1 {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 0 0 20px 0;
+}
+
+#desinger p {
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.8;
+  letter-spacing: -0.03em;
+  margin-top: 40px;
+  width: 100%; /* 1920 기준에서 보던 그 폭 그대로 */
+}
+
+.company-key {
+  position: relative;
+  color: #3a3a3a;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 3px;
+  text-decoration-color: #3a3a3a;
+  cursor: pointer;
+
+  animation: companyBlink 1.2s infinite ease-in-out;
+}
+.company-key:hover {
+  animation: none;
+  color: #111;
+  text-decoration-color: #111;
+}
+
+.company-ref {
+  color: #111;
+  text-decoration: none; /* 밑줄 원하면 underline으로 바꿔도 됨 */
+  cursor: default;
+  animation: none;
+}
+.company-key.is-active {
+  animation: none;
+  color: #111;
+  text-decoration-color: #111;
+}
+@keyframes companyBlink {
+  0%,
+  100% {
+    color: #3a3a3a;
+    text-decoration-color: #3a3a3a;
+    opacity: 1;
+  }
+  50% {
+    color: #9a9a9a;
+    text-decoration-color: #9a9a9a;
+    opacity: 0.7;
+  }
+}
+/* =========================
+   카테고리 섹션
+========================= */
 #yg_section {
-  padding-right: 16px; /* 스크롤바 여유 공간 */
+  width: 100%;
+  border-top: 2px solid #111;
+  padding-top: 30px;
+  margin-top: -16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 #yg_section h2 {
-  font-size: 32px;
-  margin: 0 0 24px;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 0 0 40px 0;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
+/* 프로젝트 리스트 */
 .section_detail {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 40px;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 8px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+  align-items: flex-start;
 }
 
-/* 각 이미지 + 텍스트 묶임이 자연스럽게 보이도록 */
-.section_detail img {
-  max-width: 100%; /* 오른쪽 칸 안에서만 커지도록 */
-  height: auto;
+/* 이미지 + 텍스트 폭 */
+#yg_section .section_detail img,
+#yg_section .section_detail h3,
+#yg_section .section_detail p {
+  width: 88%;
+  max-width: 720px;
+  margin: 0;
+  display: block;
+}
+#yg_section .section_detail p.proj-more {
+  font-size: 18px;
+  color: #9a9a9a;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  margin: 0;
+  margin-top: -10px;
+  font-style: italic;
+}
+
+/* 이미지 */
+#yg_section .section_detail img {
   display: block;
 }
 
+/* 소제목 */
 .section_detail h3 {
-  font-size: 28px;
-  margin: 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 4px 0 8px 0;
 }
 
+/* 설명 텍스트 */
 .section_detail p {
-  font-size: 22px;
+  font-size: 24px;
+  font-weight: 600;
   line-height: 1.7;
-  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-/* 필요하면 스크롤바 스타일도 살짝 */
-#right_p::-webkit-scrollbar {
+/* 스크롤바 */
+.section_detail::-webkit-scrollbar {
   width: 6px;
 }
 
-#right_p::-webkit-scrollbar-thumb {
+.section_detail::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 3px;
 }
 
-#right_p::-webkit-scrollbar-track {
+.section_detail::-webkit-scrollbar-track {
   background: transparent;
+}
+/* =========================
+   TBWA 전용 여백 보정
+========================= */
+
+/* img, h3가 없는 구조라 위 여백이 과해지는 문제 보정 */
+#yg_section.is-tbwa .section_detail {
+  gap: 0px; /* 기존 40px → 축소 */
+}
+
+#yg_section.is-tbwa .section_detail p {
+  margin-top: 0;
 }
