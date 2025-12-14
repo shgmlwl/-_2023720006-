@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------- 회사별 키워드 데이터 (시소 무게감) ----------------- */
   const companyKeywords = {
-    // ✅ TBWA 추가
     tbwa: {
       bias: -0.8,
       left: ["건축 전공", "포트폴리오 없음", "지원"],
@@ -146,34 +145,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------- 회사별 로고 ----------------- */
   const companyLogos = {
-    // ✅ TBWA 추가
-    // Img/tbwa_logo.png가 없으면 임시로 다른 이미지 경로로 바꿔도 됨
     tbwa: { src: "Img/tbwa_logo.png", alt: "TBWA Korea" },
-
     yg: { src: "Img/yg_logo.png", alt: "YG Entertainment 로고" },
-
     first: {
       src: "Img/thefirst_4.png",
       alt: "The First Penguin 로고/대표 이미지",
     },
-
     hyundai: { src: "Img/hyundai_1.png", alt: "현대카드 그래픽 대표 이미지" },
-
     toss: { src: "Img/toss_1.png", alt: "Toss Youth Card 로고" },
   };
 
   /* ----------------- 회사별 오른쪽 컨텐츠 ----------------- */
   const companyContent = {
-    // ✅ TBWA 섹션 추가 (이미지 없어도 됨)
     tbwa: {
       title: "TBWA 인턴 경험",
       projects: [
         {
-          img: "", // 이미지 없으면 빈값
-
+          img: "",
           text:
             "건축 전공으로 그래픽 포트폴리오가 전혀 없는 상태에서 TBWA 코리아의 대학생 인턴십 프로그램(주니어 보드)에 지원했다." +
-            +"실기 과제는 ‘세상에서 가장 나쁜 그림 그리기’였고, 그림 실력으로 승부하기 어렵다고 판단했다." +
+            "실기 과제는 ‘세상에서 가장 나쁜 그림 그리기’였고, 그림 실력으로 승부하기 어렵다고 판단했다." +
             "대신 촉각적으로 불쾌한 그림이라는 컨셉을 설정해, 종이에 일부러 거친 질감을 만들고 손에 닿았을 때 불쾌한 느낌이 들도록 작업했다." +
             "시각적 완성도보다는 개념과 접근 방식으로 설득하려는 선택이었다." +
             "이 경험을 통해, 잘 그리는 것보다 ‘어떻게 설득하느냐’가 디자인의 핵심일 수 있다는 감각을 처음으로 체감했다." +
@@ -337,16 +328,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------- 오른쪽 컨텐츠 렌더 ----------------- */
-  /* ----------------- 오른쪽 컨텐츠 렌더 ----------------- */
   function renderCompanyContent(company) {
     section.classList.remove("is-tbwa");
-
-    if (company === "tbwa") {
-      section.classList.add("is-tbwa");
-    }
+    if (company === "tbwa") section.classList.add("is-tbwa");
 
     const data = companyContent[company];
     if (!data) return;
+
+    // ✅✅ (추가) 회사 바뀌면 스크롤을 무조건 맨 위로
+    sectionDetailEl.scrollTop = 0;
+    sectionDetailEl.scrollLeft = 0;
 
     sectionTitleEl.textContent = data.title;
     gsap.fromTo(
@@ -359,11 +350,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const tl = gsap.timeline({ delay: 0.15 });
 
     data.projects.forEach((proj, index) => {
-      // ✅ 빈 객체({}) 같은 건 스킵
       if (!proj || (!proj.text && !proj.heading && !proj.img && !proj.more))
         return;
 
-      // ✅ 이미지: 있는 경우에만 렌더
+      // 이미지
       let img = null;
       if (proj.img && String(proj.img).trim() !== "") {
         img = document.createElement("img");
@@ -376,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const h3 = document.createElement("h3");
       h3.textContent = proj.heading || "";
 
-      // ✅ 토스 "비주류 경제학"에만 FX
+      // 토스 "비주류 경제학"만 FX
       if (company === "toss" && /비주류\s*경제학/.test(proj.heading || "")) {
         attachBijuFX(h3);
       }
@@ -388,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sectionDetailEl.appendChild(h3);
       sectionDetailEl.appendChild(p);
 
-      // ✅ more: 버튼 없이 항상 노출 (회색/작은 글씨는 CSS 클래스)
+      // more
       let moreEl = null;
       if (proj.more && String(proj.more).trim() !== "") {
         moreEl = document.createElement("p");
@@ -397,7 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sectionDetailEl.appendChild(moreEl);
       }
 
-      // ✅ 애니메이션 대상
+      // 애니메이션 대상
       const nodes = [];
       if (img) nodes.push(img);
       nodes.push(h3, p);
@@ -416,6 +406,12 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         index === 0 ? 0 : ">-0.1"
       );
+    });
+
+    // ✅✅ (추가) 이미지 로딩/레이아웃 변동 대비: 다음 프레임에 한 번 더 위로 고정
+    requestAnimationFrame(() => {
+      sectionDetailEl.scrollTop = 0;
+      sectionDetailEl.scrollLeft = 0;
     });
   }
 
@@ -687,7 +683,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------- 회사 전환 ----------------- */
   function setCompany(company) {
-    // ✅ 여기서 tbwa도 companyKeywords에 등록되어 있어야 통과됨
     if (!companyKeywords[company]) return;
     currentCompany = company;
 
@@ -729,6 +724,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     renderCompanyContent(company);
+
+    // ✅✅ (추가) setCompany에서도 한 번 더 강제 (안정빵)
+    sectionDetailEl.scrollTop = 0;
+    sectionDetailEl.scrollLeft = 0;
+    requestAnimationFrame(() => {
+      sectionDetailEl.scrollTop = 0;
+      sectionDetailEl.scrollLeft = 0;
+    });
 
     // ✅ 클릭한 회사 키만 검정 고정
     setActiveKey(company);
